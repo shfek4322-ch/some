@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>암살만 빼고 다 하는 기사</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;600;900&family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+/* Layout idea: one dark court-ledger page; hero with the knight, then world, people grouped by household, relationship stages, how play runs. */
+:root{
+  --ink:#0b0d14;
+  --panel:#12151f;
+  --line:#2a2e3d;
+  --text:#d9d6cc;
+  --muted:#8f93a3;
+  --gold:#cdb27a;
+  --crimson:#9b2f3c;
+  --serif:'Noto Serif KR','Noto Serif CJK KR',serif;
+  --sans:'Noto Sans KR','Noto Sans CJK KR',sans-serif;
+  color-scheme:dark;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{word-break:keep-all;overflow-wrap:break-word;background:var(--ink);color:var(--text);font-family:var(--sans);line-height:1.75;font-size:16px;-webkit-text-size-adjust:100%}
+a{color:var(--gold)}
+:focus-visible{outline:2px solid var(--gold);outline-offset:3px}
+.wrap{max-width:1040px;margin:0 auto;padding:0 20px}
+h1,h2,h3{font-family:var(--serif);text-wrap:balance;font-weight:900}
+.eyebrow{font-size:13px;letter-spacing:.18em;color:var(--gold);margin-bottom:10px}
+
+/* nav */
+nav{position:sticky;top:0;z-index:5;background:rgba(11,13,20,.92);backdrop-filter:blur(6px);border-bottom:1px solid var(--line)}
+nav .wrap{display:flex;gap:6px 22px;align-items:center;flex-wrap:wrap;padding-top:10px;padding-bottom:10px;font-size:14px}
+nav b{font-family:var(--serif);color:var(--gold);margin-right:auto;font-size:15px}
+nav a{color:var(--muted);text-decoration:none}
+nav a:hover{color:var(--text)}
+
+/* hero */
+.hero{position:relative;overflow:hidden;border-bottom:1px solid var(--line);background:radial-gradient(900px 500px at 75% 30%,#1b2035 0,transparent 70%),var(--ink)}
+.hero .wrap{padding-top:56px}
+.hero-copy{padding-bottom:64px;max-width:760px}
+.hero h1{font-size:clamp(38px,7.4vw,72px);line-height:1.15;margin-bottom:8px}
+.hero h1 em{font-style:normal;color:var(--crimson);text-decoration:line-through;text-decoration-thickness:4px;text-decoration-color:var(--crimson)}
+.hero .tag{font-family:var(--serif);color:var(--gold);font-size:clamp(17px,2.4vw,22px);margin:14px 0 22px}
+.hero p.lead{max-width:34em;color:var(--text)}
+.facts{display:flex;flex-wrap:wrap;gap:8px;margin-top:26px}
+.facts span{border:1px solid var(--line);padding:4px 12px;font-size:13px;color:var(--muted);background:var(--panel)}
+.hero-img{align-self:end}
+.hero-img img{display:block;width:100%;max-width:440px;margin-left:auto;-webkit-mask-image:linear-gradient(to bottom,#000 80%,transparent);mask-image:linear-gradient(to bottom,#000 80%,transparent)}
+
+section{padding:72px 0;border-bottom:1px solid var(--line)}
+section>.wrap>h2{font-size:clamp(26px,4vw,38px);margin-bottom:22px}
+.prose{max-width:38em}
+.prose p+p{margin-top:1em}
+
+/* situation */
+.situation{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:34px}
+.situation div{background:var(--panel);border-top:2px solid var(--gold);padding:20px}
+.situation h3{font-size:18px;margin-bottom:6px}
+.situation p{color:var(--muted);font-size:15px}
+
+/* people */
+.group{margin-top:40px}
+.group>h3{font-size:20px;color:var(--gold);display:flex;align-items:baseline;gap:12px;margin-bottom:14px}
+.group>h3 small{font-family:var(--sans);font-weight:400;color:var(--muted);font-size:13px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:16px}
+.card{background:var(--panel);border:1px solid var(--line);display:flex;flex-direction:column;--a:var(--gold)}
+.card .ph{aspect-ratio:16/10;overflow:hidden;border-bottom:2px solid var(--a)}
+.card .ph img{width:100%;height:100%;object-fit:cover;object-position:50% 12%;display:block}
+.card .body{padding:16px 18px 18px;display:flex;flex-direction:column;gap:4px;flex:1}
+.role{font-size:13px;letter-spacing:.16em;color:var(--a)}
+.card h4{font-family:var(--serif);font-size:21px;line-height:1.3}
+.card h4 small{display:block;font-family:var(--sans);font-weight:400;color:var(--muted);font-size:12px;letter-spacing:.08em;margin-top:2px}
+.meta{display:flex;flex-wrap:wrap;gap:4px 14px;font-size:13px;color:var(--muted);margin:6px 0 4px;padding:8px 0;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+.meta b{color:var(--text);font-weight:500}
+.card p{font-size:14.5px;color:var(--text)}
+
+.lead-card{display:grid;grid-template-columns:minmax(0,320px) 1fr;background:var(--panel);border:1px solid var(--line);border-left:3px solid var(--gold);margin-top:8px}
+.lead-card .ph{overflow:hidden;background:#0a0b10}
+.lead-card .ph img{width:100%;height:100%;object-fit:cover;object-position:50% 8%;display:block;min-height:360px}
+.lead-card .body{padding:26px 28px}
+.lead-card h4{font-family:var(--serif);font-size:30px;line-height:1.25}
+.lead-card h4 small{display:block;font-family:var(--sans);font-weight:400;color:var(--muted);font-size:13px;letter-spacing:.1em;margin-top:4px}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:10px;margin:18px 0}
+.stats div{border:1px solid var(--line);padding:8px 12px}
+.stats dt{font-size:12px;color:var(--muted)}
+.stats dd{white-space:nowrap;font-family:var(--serif);font-size:18px;font-variant-numeric:tabular-nums}
+.quote{border-left:2px solid var(--crimson);padding-left:14px;color:var(--gold);font-family:var(--serif);margin-top:14px}
+
+/* stages */
+.stages{display:grid;grid-template-columns:repeat(4,1fr);gap:0;margin-top:34px;counter-reset:s}
+.stage{padding:22px 20px 24px;border:1px solid var(--line);margin-left:-1px;background:var(--panel);position:relative}
+.stage::before{content:"";position:absolute;left:0;right:0;top:0;height:3px;background:var(--c)}
+.stage .n{font-family:var(--serif);font-size:13px;color:var(--c);letter-spacing:.14em}
+.stage h3{font-size:24px;margin:2px 0 8px}
+.stage p{font-size:14.5px;color:var(--muted)}
+.note{margin-top:16px;color:var(--muted);font-size:14px}
+
+/* flow */
+.flow{display:grid;grid-template-columns:repeat(2,1fr);gap:16px;margin-top:30px}
+.flow div{border:1px solid var(--line);padding:20px 22px;background:var(--panel)}
+.flow h3{font-size:18px;color:var(--gold);margin-bottom:6px}
+.flow p{font-size:15px;color:var(--text)}
+
+.start{background:linear-gradient(180deg,var(--ink),#10131d)}
+.start ol{margin-top:22px;padding-left:1.3em;max-width:38em}
+.start li{margin-bottom:.6em}
+.chips{display:flex;flex-wrap:wrap;gap:10px;margin-top:26px}
+.chips span{border:1px solid var(--gold);color:var(--gold);padding:6px 16px;font-family:var(--serif)}
+footer{padding:36px 0 56px;color:var(--muted);font-size:13px;text-align:center}
+
+@media (max-width:820px){
+  .hero .wrap{padding-top:40px}
+  .hero-copy{padding-bottom:40px}
+  .situation,.flow{grid-template-columns:1fr}
+  .stages{grid-template-columns:1fr 1fr}
+  .lead-card{grid-template-columns:1fr}
+  .lead-card .ph img{min-height:0;aspect-ratio:4/5;object-position:50% 10%}
+  section{padding:52px 0}
+}
+@media (max-width:480px){
+  .stages{grid-template-columns:1fr}
+  nav b{width:100%}
+  .lead-card .body{padding:20px}
+}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+</style>
+</head>
+<body>
+
+<nav aria-label="목차">
+  <div class="wrap">
+    <b>암살만 빼고 다 하는 기사</b>
+    <a href="#world">세계</a>
+    <a href="#people">인물</a>
+    <a href="#stages">관계</a>
+    <a href="#play">진행</a>
+  </div>
+</nav>
+
+<header class="hero">
+  <div class="wrap">
+    <div class="hero-copy">
+      <p class="eyebrow">엘데르 제국 · 계승 분쟁 · 황녀궁</p>
+      <h1>암살만<br>빼고 다 하는<br>기사</h1>
+      <p class="tag">황후궁이 보낸 근위기사가 당신의 문 앞에 섰다.</p>
+      <p class="lead">당신은 폐위 직전의 황녀입니다. 지지 세력은 무너졌고, 궁정은 당신이 쓰러지기를 기다립니다. 그런 궁에 황후가 직접 기사를 한 명 보냈습니다. 맛을 보고, 곁을 지키고, 농담을 던지는 사람입니다.</p>
+      <div class="facts">
+        <span>궁정 암투</span>
+        <span>생존 정치</span>
+        <span>근위기사 로맨스</span>
+        <span>천천히 열리는 관계</span>
+      </div>
+    </div>
+  </div>
+</header>
+
+<section id="world">
+  <div class="wrap">
+    <p class="eyebrow">세계</p>
+    <h2>엘데르 제국, 후계를 두고 갈라진 궁정</h2>
+    <div class="prose">
+      <p>중세풍의 대제국 엘데르. 황제 아우렐리오에게는 두 사람의 후계 후보가 있습니다. 선황후의 소생인 황녀와, 새 황후 이졸데의 아들 레오넬 황자입니다.</p>
+      <p>적자의 계승권은 황녀에게 있습니다. 그러나 황녀를 지지하던 세력은 하나씩 사라졌고, 황후와 재상은 황자를 옥좌에 올리려 폐위를 서두릅니다. 이 이야기는 전쟁터가 아니라 식탁과 복도와 찻잔 위에서 벌어집니다.</p>
+    </div>
+    <div class="situation">
+      <div><h3>당신</h3><p>선황후의 딸이자 정당한 계승권자. 지금은 황녀궁에 갇힌 채 폐위를 기다리는 처지입니다.</p></div>
+      <div><h3>적</h3><p>황후와 재상이 이끄는 궁정. 눈에 보이는 칼보다 서류와 소문이 먼저 도착합니다.</p></div>
+      <div><h3>기사</h3><p>황후궁이 보낸 근위기사 한 명. 누구의 사람인지는 이야기가 진행되며 드러납니다.</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="people">
+  <div class="wrap">
+    <p class="eyebrow">인물</p>
+    <h2>궁정에서 만날 사람들</h2>
+
+    <div class="group">
+      <h3>근위기사 <small>황실근위대</small></h3>
+      <article class="lead-card">
+        <div class="ph"><img src="img/kas.jpg" alt="세르반 카시엘" loading="lazy"></div>
+        <div class="body">
+          <p class="role" style="color:var(--gold);font-size:13px;letter-spacing:.16em">근위기사</p>
+          <h4>세르반 카시엘<small>Serván Kassiel</small></h4>
+          <dl class="stats">
+            <div><dt>나이</dt><dd>27세</dd></div>
+            <div><dt>키</dt><dd>187cm</dd></div>
+            <div><dt>생일</dt><dd>1월 28일</dd></div>
+            <div><dt>혈액형</dt><dd>A형</dd></div>
+            <div><dt>유형</dt><dd>7w8 · ENTP</dd></div>
+          </dl>
+          <p>황실근위대 소속으로, 황후궁의 명을 받아 황녀궁에 배속되었습니다. 식사와 차의 맛을 먼저 보고, 문 앞을 지키고, 낮은 목소리로 느리게 존대하며 건조한 농담을 던집니다.</p>
+          <p class="quote">"암살만 빼고 다 하겠습니다."</p>
+        </div>
+      </article>
+    </div>
+
+    <div class="group">
+      <h3>황녀궁 <small>당신의 사람들</small></h3>
+      <div class="grid">
+        <article class="card" style="--a:#c9c1a0">
+          <div class="ph"><img src="img/maid.jpg" alt="시녀장 마르가 벨로네" loading="lazy"></div>
+          <div class="body">
+            <span class="role">시녀장</span>
+            <h4>마르가 벨로네<small>Marga Belone</small></h4>
+            <div class="meta"><span>나이 <b>50대</b></span><span>소속 <b>황녀궁</b></span></div>
+            <p>선황후 때부터 곁을 지켜 온 충성스러운 시녀장. 당신이 믿을 수 있는 몇 안 되는 사람입니다.</p>
+          </div>
+        </article>
+        <article class="card" style="--a:#7fb0d8">
+          <div class="ph"><img src="img/page.jpg" alt="시종 티모 렌" loading="lazy"></div>
+          <div class="body">
+            <span class="role">시종</span>
+            <h4>티모 렌<small>Timo Renn</small></h4>
+            <div class="meta"><span>나이 <b>20대</b></span><span>소속 <b>황녀궁</b></span></div>
+            <p>궁 안팎의 소식을 가장 먼저 듣는 젊은 시종. 걸음이 빠르고 눈치가 더 빠릅니다.</p>
+          </div>
+        </article>
+        <article class="card" style="--a:#bda878">
+          <div class="ph"><img src="img/butler.jpg" alt="집사 오스발트 켄" loading="lazy"></div>
+          <div class="body">
+            <span class="role">집사</span>
+            <h4>오스발트 켄<small>Oswald Ken</small></h4>
+            <div class="meta"><span>나이 <b>60대 초반</b></span><span>소속 <b>황녀궁</b></span></div>
+            <p>황녀궁의 살림과 장부를 쥔 노집사. 궁이 얼마나 오래 버틸 수 있는지 가장 정확히 압니다.</p>
+          </div>
+        </article>
+      </div>
+    </div>
+
+    <div class="group">
+      <h3>황제와 황후, 그리고 황자 <small>황실</small></h3>
+      <div class="grid">
+        <article class="card" style="--a:#d29a5a">
+          <div class="ph"><img src="img/emperor.jpg" alt="황제 아우렐리오 엘데르" loading="lazy"></div>
+          <div class="body">
+            <span class="role">황 제</span>
+            <h4>아우렐리오 엘데르<small>Aurelio Elder</small></h4>
+            <div class="meta"><span>나이 <b>50대 초반</b></span><span>소속 <b>황실</b></span></div>
+            <p>당신의 아버지. 죄책감을 안은 채 지켜보기만 합니다. 그의 침묵이 무엇을 뜻하는지는 쉽게 읽히지 않습니다.</p>
+          </div>
+        </article>
+        <article class="card" style="--a:#b78ad0">
+          <div class="ph"><img src="img/empress.jpg" alt="황후 이졸데 폰 마르벤" loading="lazy"></div>
+          <div class="body">
+            <span class="role">황 후</span>
+            <h4>이졸데 폰 마르벤<small>Isolde von Marven</small></h4>
+            <div class="meta"><span>나이 <b>40대</b></span><span>소속 <b>황후궁</b></span></div>
+            <p>새어머니이자 궁정의 실질적인 주인. 아들 레오넬을 옥좌에 올리려 합니다. 기사를 보낸 사람입니다.</p>
+          </div>
+        </article>
+        <article class="card" style="--a:#e3c15a">
+          <div class="ph"><img src="img/leonel.jpg" alt="황자 레오넬 엘데르" loading="lazy"></div>
+          <div class="body">
+            <span class="role">황 자</span>
+            <h4>레오넬 엘데르<small>Leonel Elder</small></h4>
+            <div class="meta"><span>나이 <b>10대 후반</b></span><span>소속 <b>황실</b></span></div>
+            <p>이졸데의 아들. 순하고 영리하며 악의가 없습니다. 어머니의 도구로 쓰이는 것이 스스로도 불편합니다.</p>
+          </div>
+        </article>
+      </div>
+    </div>
+
+    <div class="group">
+      <h3>조정과 근위대 <small>궁 밖의 권력</small></h3>
+      <div class="grid">
+        <article class="card" style="--a:#6fa58f">
+          <div class="ph"><img src="img/chancellor.jpg" alt="재상 에드문트 하르벤" loading="lazy"></div>
+          <div class="body">
+            <span class="role">재 상</span>
+            <h4>에드문트 하르벤<small>Edmund Harven</small></h4>
+            <div class="meta"><span>나이 <b>50대</b></span><span>소속 <b>조정</b></span></div>
+            <p>반대파의 핵심. 황녀의 폐위를 법과 절차로 밀어붙이는 사람입니다.</p>
+          </div>
+        </article>
+        <article class="card" style="--a:#aab6d0">
+          <div class="ph"><img src="img/captain.jpg" alt="근위대장 발더 크라이스" loading="lazy"></div>
+          <div class="body">
+            <span class="role">근위대장</span>
+            <h4>발더 크라이스<small>Balder Kreis</small></h4>
+            <div class="meta"><span>나이 <b>40대</b></span><span>소속 <b>황실근위대</b></span></div>
+            <p>어느 편에도 서지 않는 중립의 지휘관이자 카시엘의 직속 상관. 명령은 명령으로만 움직입니다.</p>
+          </div>
+        </article>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="stages">
+  <div class="wrap">
+    <p class="eyebrow">관계</p>
+    <h2>기사와 황녀 사이의 네 단계</h2>
+    <div class="prose"><p>카시엘과의 거리는 이야기를 따라 천천히 바뀝니다. 각 단계에서 무엇이 열리는지는 직접 확인하세요.</p></div>
+    <div class="stages">
+      <div class="stage" style="--c:#d8b84a"><span class="n">STAGE 1</span><h3>경계</h3><p>서로를 믿지 않는 첫 거리. 그는 웃고, 당신은 의심합니다.</p></div>
+      <div class="stage" style="--c:#d8b84a"><span class="n">STAGE 2</span><h3>균열</h3><p>가면에 금이 가기 시작합니다. 사소한 장면이 오래 남습니다.</p></div>
+      <div class="stage" style="--c:#e08a3c"><span class="n">STAGE 3</span><h3>공범</h3><p>공범이 될 수도, 아닐 수도 있습니다.</p></div>
+      <div class="stage" style="--c:#c4414f"><span class="n">STAGE 4</span><h3>고백</h3><p>숨겨 온 이야기가 열립니다. 마지막 단계에서만 알 수 있는 것이 있습니다.</p></div>
+    </div>
+    <p class="note">기사의 과거와 그가 이 궁에 온 이유는 마지막 단계에서 밝혀집니다.</p>
+  </div>
+</section>
+
+<section id="play">
+  <div class="wrap">
+    <p class="eyebrow">진행</p>
+    <h2>이야기는 이렇게 흘러갑니다</h2>
+    <div class="flow">
+      <div><h3>궁정은 움직입니다</h3><p>황후와 재상은 당신의 선택과 상관없이 다음 수를 둡니다. 초대장, 소문, 갑작스러운 심문이 차례로 도착합니다.</p></div>
+      <div><h3>당신이 고릅니다</h3><p>누구를 믿고 무엇을 숨길지는 당신의 몫입니다. 선택에 따라 폐위를 막을 길과 계승으로 가는 길이 열립니다.</p></div>
+      <div><h3>기사는 곁에 있습니다</h3><p>식사와 차를 확인하고, 복도를 걷고, 문 앞에 섭니다. 맡은 일은 무엇이든 하지만, 그가 하지 않는 일이 하나 있습니다.</p></div>
+      <div><h3>황녀궁이 기반입니다</h3><p>마르가, 티모, 오스발트가 당신의 안쪽을 지킵니다. 이들의 신뢰를 지키는 일도 생존의 일부입니다.</p></div>
+    </div>
+  </div>
+</section>
+
+<footer class="wrap">「암살만 빼고 다 하는 기사」 · 엘데르 제국 설정</footer>
+
+</body>
+</html>
